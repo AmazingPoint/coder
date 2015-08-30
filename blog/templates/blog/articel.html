@@ -1,0 +1,80 @@
+{% extends "blog/base.html"%}
+{% load staticfiles %}]
+
+{% block style %}
+<link rel="stylesheet" href="{%static  "css/editormd.preview.css" %}"/>
+        <style>
+            body {padding: 40px;}
+            
+            #layout > header, .btns {
+                width: auto;
+            }
+            
+            #custom-toc-container {
+                padding-left: 0;
+            }
+    
+        </style>
+{% endblock %}
+
+{% block navbar %}
+<li class="active"><a href="/">码</a></li>
+<li><a href="/metas"><span class="glyphicon glyphicon-th"></span></a></li>
+<li><a href="/articel/1"><span class="glyphicon glyphicon-erase"></span></a></li>
+
+{% endblock %}
+
+{% block content %}
+<!-- content -->
+<div class="col-md-7">
+    <a href="javascript:goback();"> <span class="glyphicon glyphicon-arrow-left"></span> </a>
+    <!-- content -->
+    <div class="content">
+        <div id="layout">
+            <div id="test-editormd-view2">
+                <textarea id="append-test" style="display:none;">{{articel.content}}</textarea>          
+            </div>
+        </div>
+        <!-- <script src="js/zepto.min.js"></script>
+        <script>        
+            var jQuery = Zepto;  // 为了避免修改flowChart.js和sequence-diagram.js的源码，所以使用Zepto.js时想支持flowChart/sequenceDiagram就得加上这一句
+        </script> -->
+        <script src="{% static "js/jquery.min.js" %}"></script>
+        <script src="{% static "lib/marked.min.js" %}"></script>
+        <script src="{% static "lib/prettify.min.js" %}"></script>
+        
+        <script src="{% static "lib/raphael.min.js" %}"></script>
+        <script src="{% static "lib/underscore.min.js" %}"></script>
+        <script src="{% static "lib/sequence-diagram.min.js" %}"></script>
+        <script src="{% static "lib/flowchart.min.js" %}"></script>
+        <script src="{% static "lib/jquery.flowchart.min.js" %}"></script>
+
+        <script src="{% static "js/editormd.js" %}"></script>
+        <script type="text/javascript">
+            $(function() {
+                var testEditormdView, testEditormdView2;
+                    
+                testEditormdView2 = editormd.markdownToHTML("test-editormd-view2", {
+                    htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                    emoji           : true,
+                    taskList        : true,
+                    tex             : false,  // 默认不解析
+                    flowChart       : true,  // 默认不解析
+                    sequenceDiagram : true,  // 默认不解析
+                });
+            });
+        </script>
+    </div>
+    <!-- end content-->
+
+    <!-- bottom -->
+    <div class="bottom" style="text-align:left;">
+        <hr>
+        <p><strong>{{ articel.author }}</strong></p>
+        <i>杜绝粗俗信息的根本办法是---------不设置Comment</i><br/>
+        <i>本文由{{ articel.author }}发布，如果你觉得本文对你有用或者你想要迫切的对{{ articel.author }} 表达你强烈的仰（爱）慕之情，请通过邮箱联系<i><br>
+        <a href="mailto:{{ articel.author.email }}">{{ articel.author.email }}</a>
+    </div>
+    <!-- end bottom -->
+</div>
+{% endblock %}

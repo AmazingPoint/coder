@@ -1,0 +1,114 @@
+{% extends "blog/base.html"%}
+{% load staticfiles %}
+{% load markdown_deux_tags %}
+
+
+{% block navbar %}
+<li class="active"><a href="/">码</a></li>
+<li><a href="/metas"><span class="glyphicon glyphicon-th"></span></a></li>
+<li><a href="/articel/1"><span class="glyphicon glyphicon-erase"></span></a></li>
+{% endblock %}
+
+
+{% block content %}
+<!-- content -->
+<div class="col-md-7">
+	<!-- top -->
+	<div class="top">
+		<ul class="metalist">
+			{% for meta in meta_list %}
+					<li><a id="meta" class="metalink" href="/home/{{user.id}}/{{meta.id}}">{{ meta.name }}</a></li>
+			{% endfor %}
+			<li><a class="metalink" href="/"> 别人的文章 </a></li>
+		</ul>
+
+		<div class="search hidden-xs hidden-sm">
+			<input id="search" type="text" class="form-control" placeholder="搜索">
+		</div>
+	</div>
+	<!-- end top -->
+
+	<!-- content -->
+	<div class="content" id="articel_list">
+		<hr>
+		{% if articel_list %}
+			{% for articel in articel_list %}
+			<div class="media">
+				<div class="media-left media-middle">
+			    	<a href="#">
+			      		<div class="media-object user-info "> {{ articel.author.username | slice:'2'}} </div>
+			    	</a>
+			  	</div>
+			 	<div class="media-body">
+			    	<h4 class="media-heading">
+			    		<a class="headlinelink" href="/articel/{{articel.id}}"> 
+			    			{{ articel.headline }} 
+			    		</a>
+			    	</h4>
+			    	<small>
+				    		{{ articel.content | markdown | striptags | slice:'100' }}...
+			    	</small>
+			  	</div>
+			  	<span style="float:right;"> 
+			  	{% if user.id  == articel.author.id %}
+			  		{% if articel.is_pub ==  False %} （未发布） {% endif%}
+			  		<a href="#" class="del-link" at-id="{{ articel.id }}" style="margin-right:5px; "><small> 删除 </small></a>
+			  		<a href="/edit/{{articel.id}}" style="margin-right:5px; "> <small>编辑 </small></a> 
+			  	{% endif %}
+			  	 <small>发布于: {{ articel.pub_date}}</small> </span>
+			</div>
+			{% endfor %}
+		{% else %}
+			你还没有写下文章，现在就来 <a href="/create">编辑一篇</a>？
+		{% endif %}
+		
+		
+
+		<script type="text/javascript">
+		var number_start = 10;
+		function loadmore(){
+			$.get('/loadmore/',
+				{
+					meta_name: $("#meta").html(),
+					number_start: number_start
+				},
+				function(data){
+					if(data.length == 1){
+						$('#myModal').modal('show')
+					}					
+					$("#articel_list").append(data)
+					number_start += 10;
+				});
+		}
+
+		</script>
+	</div>
+	<!-- end content-->
+
+	<!-- bottom -->
+	<div class="bottom" margin-top:-20px;>
+		<button id="loadmore" onclick="loadmore()" type="button" class="btn btn-danger btn-lg"> 点击加载更多 </button>
+		<div id="myModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+		  <div class="modal-dialog modal-sm">
+		    <div class="modal-content" style="padding: 20px;">
+		      <h4 style="color:#339966;"><span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;&nbsp;没有更多内容了！</h4>
+		    </div>
+		  </div>
+		</div>
+
+		<div id="myModal2" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+		  <div class="modal-dialog modal-sm">
+		    <div class="modal-content" style="padding: 20px;">
+		      <h4 style="color:#339966;"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;&nbsp;你确定？</h4>
+		      		<p>
+					  <button data-dismiss="modal"  type="button" class="btn btn-success">我手哆嗦了</button>
+					  <button type="button" class="del-button btn btn-danger">依旧删除</button>
+					</p>
+		    </div>
+		  </div>
+
+		</div>
+	</div>
+	<!-- end bottom -->
+</div>
+{% endblock %}

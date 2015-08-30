@@ -1,0 +1,21 @@
+{% load markdown_deux_tags %}
+{% for articel in articel_list %}
+		<div class="media">
+			<div class="media-left media-middle">
+		    	<a href="#">
+		      		<div class="media-object user-info "> {{ articel.author.username | slice:'2'}}  </div>
+		    	</a>
+		  	</div>
+		 	<div class="media-body">
+		    	<h4 class="media-heading">
+		    		<a class="headlinelink" href="/articel/{{articel.id}}"> 
+		    			{{ articel.headline }} 
+		    		</a>
+		    	</h4>
+		    	<small>
+			    		{{ articel.content | markdown | striptags | slice:'100' }}...
+		    	</small>
+		  	</div>
+		  	<span style="float:right;"> <small>  发布于: {{ articel.pub_date}}</small> </span>
+		</div>
+{% endfor %}

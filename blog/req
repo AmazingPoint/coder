@@ -1,0 +1,5 @@
+django > 1.7
+python == 2.7
+bootstrap >= 3.2
+jquery >= 1.5
+pip install django-markdown-deux

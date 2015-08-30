@@ -1,0 +1,179 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+	<link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+	<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="{% static "js/jquery.min.js" %}"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="{% static "js/bootstrap.min.js" %}"></script>
+	<title>CODERBLOG</title>
+	{% block style %}
+	{% endblock %}
+	{% block javascript %}
+	{% endblock %}
+	<style type="text/css">
+		body,ul{margin: 0; padding: 0;}
+		a:hover{text-decoration: none; cursor: pointer;}
+		.row{max-width: 100%;}
+		.navbar{margin: 0; padding: 0; list-style: none; width: 42px; background: #339966; border: 0; position: fixed;}
+		.navbar li{width: 42px; height: 42px; margin: 0; float: left; font-size: 24px; text-align: center; line-height: 42px; }
+		.col-md-3 {color: #ffffff; float:left; overflow:hidden; margin-right:30px; }
+		.col-md-3 a{color: #ffffff;}
+		.col-md-3 a:hover{color: #ffffff; text-decoration: none; }
+		.active{background: #ff8c00; 	}
+		.menubar{background: #ff8c00; float: left;  margin-left: 42px; text-align: center; padding: 10px 30px; position: fixed;}
+		.menubottom{bottom: 20px; position: fixed; text-align: left;}
+		.col-md-7 {margin:10px 0px;}
+		.navbar li:hover{background: #ffaa00;}
+
+		.top{margin: 0; width: 100%; float: left; }
+		.metalist{list-style: none; padding: 0; margin: 0;  float: left; width: 100%;}
+		.metalist li{width: auto; float: left;  padding:5px; height: 30px; margin-bottom: 10px; }
+		.metalist a{display: block; height: 30px; background: #eee; padding: 5px; color: #ccc; border-radius: 6px;}
+		.metalist a:hover{background: #ccc; color:#eee; text-decoration: none; }
+		.search {float: right;  width:150px; margin-top:-35px;}
+
+		.content { width: 100%; float: left; }
+		.media-object{width: 60px; height: 60px;}
+
+		.headlinelink {color: #339966;}
+
+		.media{border-bottom: dashed 1px #ccc; padding: 20px 10px;}
+		.bottom{float: left; width: 100%; text-align: center; margin: 30px;}
+
+		.col-md-1{float: right; margin-top: 10px; margin-left:-10px;  margin-right: 0px; padding: 0; text-align: right; width: auto; overflow: hidden;}
+
+		.user-info{ background: #999; font-size: 36px; color: #fff; border-radius: 100px; text-align: center; line-height: 60px; overflow: hidden; }
+
+	</style>
+ 
+	<script type="text/javascript">
+		var del_id = -1;
+		$(document).ready(function(){
+			//设置导航条高度，当窗口大小调整后重新设置
+			set_navbar_height(get_doc_height());			
+			//设置展示面板的size
+			set_menubar_wh(get_div_width, get_doc_height);
+			$(window).resize(function(){
+				set_navbar_height(get_doc_height());
+				set_menubar_wh(get_div_width, get_doc_height);
+			});
+
+			$(".del-link").click(function(){
+				$("#myModal2").modal('show')
+				del_id = $(this).attr('at-id')
+			});
+
+			$(".del-button").click(function(){
+				dodel(del_id);
+			});
+
+			$("#search").keyup(function(){
+		        if(event.keyCode == 13){
+		            $.get("/search/",
+		            {
+		            	search_text : $("#search").val()	
+		            },function(data){
+		            	if(data.length == 1){
+							$('#myModal').modal('show')
+						}
+						$("#articel_list").html(data)
+		            });
+		        }
+		    });
+
+		});
+
+		function dodel(articel_id){
+			url = '/del/' + articel_id
+			window.location.href = url
+		}
+
+		function canceldel(){
+			$("myModal2").modal('hide')
+		}
+
+		function goback(){
+			window.location.href = document.referrer
+		}
+
+		//获取屏幕高度
+		function get_doc_height(){
+			var doc_height = $(document).height();
+			return doc_height;
+		}
+		//获取col-md-3的宽度
+		function get_div_width(){
+			var width = $(".col-md-3").width();
+			return width;
+		}
+		//设置导航条的高度为屏幕高度
+		function set_navbar_height(doc_height){
+			$(".navbar").css("height", doc_height);
+			$("#editor").css("height", doc_height);
+		}
+		//设置展示面板的宽度及高度
+		function set_menubar_wh(width, height){
+			$("#editor").css("height", height);
+			$(".menubar").css("height", height);
+			$(".menubar").css("width", width);
+		}
+
+	</script>
+
+</head>
+
+<body>
+	<div class="row">
+		
+		<!-- nav bar -->
+		<div class="col-md-3 hidden-sm hidden-xs">
+			<ul class="navbar">
+				<!-- block navbar-->
+				{% block navbar %}
+
+				{% endblock %}
+				<!-- endblock -->
+			</ul>
+
+			<div class="menubar">
+				<a href="/"><img src="{%static "img/logo.png" %}"></a>
+				<hr>
+				<small> 源代码:<a href=""> https://github.com/AmazingPoint/BlogPoint.git </a> </small>
+				<div class="menubottom">
+					<h2><b>浮躁的世界</b></h2>
+					<h2><b>用记录涤荡心灵</b></h2>
+					<a href="/create"><button type="button" class="btn btn-success btn-lg"> <span class="glyphicon glyphicon-book"></span> 感受文字的力量 </button>
+				</div></a>
+			</div>
+
+
+		</div>
+
+		{% block content%}
+			<div class="col-md-7">
+				
+			</div>
+		{% endblock%}
+
+		
+		<!-- user info -->
+		<div class="col-md-1" >
+			{% if user.is_authenticated %}
+				<a href="/home/{{ user.id }}">{{ user.username }}</a>
+				<span>|</span>
+				<a href="/logout/">注销<a/>
+			{% else %}
+				<a href="/login/"> 登录 </a>
+				<span>|</span>
+				<a href="/regist/"> 注册 </a>
+			{% endif %}
+		</div>
+	</div>	
+</body>
+
+</html>

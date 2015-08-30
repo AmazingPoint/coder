@@ -1,0 +1,31 @@
+{% extends "blog/base.html"%}
+{% load staticfiles %}
+
+{% block style %}
+	<style type="text/css">
+		.ometalist{list-style: none; padding: 0; margin: 0; width: 100%; }
+		.ometalist li{width: 150px; height: 180px; border: #999 solid 1px;  color: #fff; background: #aaa; padding: 10px; margin: 15px;  float: left; display: block; overflow: hidden; text-align: center; line-height: 160px; font-size: 30px;}
+	</style>
+{% endblock %}
+
+{% block navbar %}
+<li ><a href="/">码</a></li>
+<li class="active" ><a href="/metas"><span class="glyphicon glyphicon-th"></span></a></li>
+<li><a href="/articel/1"><span class="glyphicon glyphicon-erase"></span></a></li>
+{% endblock %}
+
+{% block content %}
+<!-- content -->
+<div class="col-md-7">
+
+	<!-- content -->
+	<div class="content">
+		<ul class="ometalist">
+			{% for meta in metas %}
+				<a href="/meta/{{ meta.id }}"><li><b>{{ meta.name }}</b></li></a>
+			{% endfor %}
+		</ul>
+	</div>
+	<!-- end content-->
+</div>
+{% endblock %}

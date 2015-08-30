@@ -1,0 +1,215 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8" />
+        <title>JUST WRITE MORE CODE</title>
+        <link rel="stylesheet" href="{% static "css/edit-style.css" %}"/>
+        <link rel="stylesheet" href="{% static "css/editormd.css" %}" />
+        <style type="text/css">
+         /**
+			* 隐藏默认的checkbox
+			 */
+				input[type=checkbox] {
+				visibility: hidden;
+			}
+        	/**
+			 * Checkbox Four
+			 */
+			.checkboxFour {
+				width: 20px;
+				height: 20px;
+				background: #eee;
+				margin: 10px 20px;
+				float: left;
+				border-radius: 100px;
+				position: relative;
+				-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+				-moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+				box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+			}
+			 /* Create the checkbox button
+			 */
+			.checkboxFour label {
+				display: block;
+				width: 10px;
+				height: 10px;
+				border-radius: 100px;
+				-webkit-transition: all .5s ease;
+				-moz-transition: all .5s ease;
+				-o-transition: all .5s ease;
+				-ms-transition: all .5s ease;
+				transition: all .5s ease;
+				cursor: pointer;
+				position: absolute;
+				top: 5px;
+				left: 5px;
+				z-index: 1;
+			 
+				background: #ccc;
+			 
+				-webkit-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+				-moz-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+				box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+			}
+			/**
+			 * Create the checked state
+			 */
+			.checkboxFour input[type=checkbox]:checked + label {
+				background: #26ca28;
+			}
+        </style>
+    </head>
+    <body>
+	 	<p style="width:100%; display:block; height:auto; float:left; padding:0; margin:0; background:#339966; font-size:12px; color:#fff; text-align:left;" id="alert"></p>
+	 	<div id="checkboxse" style-"width:100%; float:left;">
+		<div style="float:left; line-height:45px; font-size:18px;" onclick="relpub();"><i> 设置标签 方便自己 造福后人<i/> </div>
+		<section>
+		{% for meta in metas %}
+			  	<div class="checkboxFour">
+			  		<input type="checkbox" value="{{ meta.id }}" id="checkboxFourInput{{meta.id}}" name="metacheck" 
+			  		{% for ma in articel.meta.all %} 
+			  			{% if ma.id == meta.id %} 
+			  				checked="checked" 
+			  			{% endif %}
+			  		{% endfor %}/>
+				  	<label for="checkboxFourInput{{meta.id}}"></label>
+			  	</div>
+				<div style="float:left; margin-left:-15px; line-height:45px; margin-top:0px;"> <h3>{{ meta.name }}</h3> </div>
+		{% endfor %}
+		</section>
+		<div style="float:right; line-height:45px; margin-right:10px;"><input onclick='relpub();' type='button' style='width:160px; background:#0066CC; height:30px; font-size:18px; color:#FFF; border:none; border-radius: 0.2em; cursor:pointer; float-right:10px;' value='确认投稿并发布'></button></div>
+		</div>
+	 	
+	 	<div id="layout" user-id="{{ user.id }}">
+            <div id="test-editormd" style="float:left"  articel-id="{{articel.id}}">
+                <textarea id="markdown-text" style="display:none;">{{ articel.content }}</textarea>
+            </div>
+        </div>
+
+        <script src="{% static "js/jquery.min.js" %}"></script>
+        <script src="{% static "js/editormd.min.js" %}"></script>
+        <script type="text/javascript">			
+        	$(document).ready(function(){
+        		$("#alert").hide();
+				$("#checkboxse").hide();
+				$(window).resize(function(){
+					$("#test-editormd").height = $(document).height()
+				});
+        	});	
+        	//save
+			var testEditor;
+			var metas = '';
+			var user_id = $("#layout").attr('user-id')
+
+			function goback(){
+				window.location.href = document.referrer
+			}
+
+			function gohome(){
+				url = "/home/" + user_id
+				window.location.href = url
+			}
+
+			// using jQuery
+			function getCookie(name) {
+			    var cookieValue = null;
+			    if (document.cookie && document.cookie != '') {
+			        var cookies = document.cookie.split(';');
+			        for (var i = 0; i < cookies.length; i++) {
+			            var cookie = jQuery.trim(cookies[i]);
+			            // Does this cookie string begin with the name we want?
+			            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+			                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+			                break;
+			            }
+			        }
+			    }
+			    return cookieValue;
+			}
+			var csrftoken = getCookie('csrftoken');
+
+			function csrfSafeMethod(method) {
+			    // these HTTP methods do not require CSRF protection
+			    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+			}
+			
+			function subgo(){
+				var text = $("#markdown-text").text();
+				var id = $("#test-editormd").attr('articel-id');
+				var arr = text.split("\n");
+				var headline = arr[0];
+				re = new RegExp("#","g");
+				headline = headline.replace(re,"");
+				$.ajax({
+					type:"POST",
+					url:"/save/",
+					data : {
+						id 		 : id,
+						headline : headline, 
+						content  : text,
+						metas	 : metas
+					},
+				    beforeSend: function(xhr, settings) {
+				        if (!csrfSafeMethod('POST') && !this.crossDomain) {
+				            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+				        }
+				    },
+	  				success : function(result){
+	  					if(result == "success"){
+							$("#alert").show();
+							$("#alert").html("文件已保存，节点为:  " + (new Date()));
+						}else{
+							url = "/articel/" + result
+							window.location= url
+						}
+	  				}
+				});
+			}
+
+			//add meta
+			function pub(){
+				$("#checkboxse").show();
+				subgo();
+			}
+
+			function relpub(){
+				var arry = $("[name='metacheck']");
+				$.each(arry, function(n, value){
+					if($(value).is(':checked')){
+						metas += $(value).val() + ',';
+					}
+				});
+				if(metas==''){
+					alert("选择标签 是一种美德！")
+				}else{
+					subgo();
+				}
+			}
+
+			$(function() {
+                testEditor = editormd("test-editormd", {
+                    width   : "100%",
+                    height  : $(document).height()-30,
+                    syncScrolling : "single",
+                    path    : "{% static "lib/" %}",
+                    toolbarIcons : function() {
+			            return ["undo","redo","|","bold","del","italic","quote","uppercase","lowercase","h1","h2","h3","h4","h5","h6","|","list-ul","list-ol","hr","|","link","reference-link","image","code-block","datetime","html-entities","|","watch","preview","clear","search","||","close","save","pub"]
+			        },
+			         
+			        toolbarCustomIcons :{
+			            close   : "<input onclick='gohome();' type='button' style='width:100px; background:#cc6666; height:35px; font-size:18px; color:#FFF; border:none; border-radius: 0.3em; cursor:pointer;' value='关闭'></button>",
+			            save : "<input onclick='subgo();' type='button' style='width:100px; background:#339933; height:35px; font-size:18px; color:#FFF; border:none; border-radius: 0.3em; cursor:pointer; margin:0 10px;' value='保存'></button>",
+			            pub : "<input onclick='pub();' type='button' style='width:100px; background:#0066CC; height:35px; font-size:18px; color:#FFF; border:none; border-radius: 0.3em; cursor:pointer;' value='发布'></button>"
+			        },
+                });
+
+            });
+			
+			
+	
+        </script>
+
+
+    </body>
+</html>

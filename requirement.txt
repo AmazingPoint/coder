@@ -1,0 +1,3 @@
+django > 1.7
+python == 2.7
+pip install django-markdown-deux

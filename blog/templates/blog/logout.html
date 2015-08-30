@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>logout</title>
+    </head>
+
+    <body>
+    	<div id="timeClew"></div>
+		<script type="text/javascript">
+		var url = "/" //要跳转的地址
+		var obj = document.getElementById("timeClew"), time = 2;
+		function setTimeClew(){
+		 obj.innerHTML = "登陆成功，" + (time--) + "秒后自动跳转，如果没有自动跳转<a href=\"" + url + "\">请点这里<\/a>";
+		 if(time < 0){ window.location.href = url; }else{ setTimeout(setTimeClew, 1000) }
+		}
+		setTimeClew();
+		</script>
+
+    </body>
+</html>
