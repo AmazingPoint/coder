@@ -16,6 +16,7 @@ from django.core import serializers
 from django.template.loader import get_template 
 from django.template import Context 
 from mail_sender import SendMail
+import time
 
 @login_required(login_url="/login/")
 def home(request, user_id):
@@ -39,7 +40,7 @@ def delete(request, articel_id):
 	articel = Articel.objects.get(id=articel_id)
 	if request.user.id == articel.author.id:
 		articel.delete()
-		return home(request, request.user.id)
+		return HttpResponseRedirect(reverse('home', args=(request.user.id,)))
 	else:
 		return HttpResponse("我很懒，所以我也很穷，别黑我！")
 
@@ -184,7 +185,7 @@ def dologin(request):
 	user = authenticate(username = username, password = password)
 	if user is not None:
 		auth_login(request,user)
-		return index(request)
+		return home(request,user.id)
 	else:
 		error = '请检查用户名或密码'
 		return render(request, 'blog/login.html', locals())
