@@ -1,14 +1,16 @@
 from django.conf.urls import patterns, url
 from blog import views
 
+print "This is url!!!!!!!!!!!!!"
+
 urlpatterns = patterns('',	
 	url(r'^$', views.index, name="index"),
-	url(r'^edit/(?P<articel_id>[0-9]+)/$', views.edit, name="edit"),
-	url(r'^articel/(?P<articel_id>[0-9]+)/$', views.articel, name="articel"),
-	url(r'^meta/(?P<meta_id>[0-9]+)/$', views.meta, name="meta"),
-	url(r'^home/(?P<user_id>[0-9]+)/$', views.home, name="home"),
-	url(r'^home/(?P<user_id>[0-9]+)/(?P<meta_id>[0-9]+)/$', views.metaown, name="metaown"),
-	url(r'^del/(?P<articel_id>[0-9]+)/$', views.delete, name="del"),
+	url(r'^edit/(?P<articel_id>\d+)/$', views.edit, name="edit"),
+	url(r'^articel/(?P<articel_id>\d+)/$', views.articel, name="articel"),
+	url(r'^meta/(?P<meta_id>\d+)/$', views.meta, name="meta"),
+	url(r'^home/(?P<user_id>\d+)/$', views.home, name="home"),
+	url(r'^home/(?P<user_id>\d+)/(?P<meta_id>\d+)/$', views.metaown, name="metaown"),
+	url(r'^del/(?P<articel_id>\d+)/$', views.delete, name="del"),
 	url(r'^save/', views.save, name="save"),
 	url(r'^create/', views.create, name="create"),
 	url(r'^login/', views.login, name="login"),

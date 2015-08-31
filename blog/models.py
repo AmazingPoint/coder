@@ -25,8 +25,8 @@ class Articel(models.Model):
 	content = models.TextField('文章内容')
 	is_pub = models.BooleanField(default=False)
 	author = models.ForeignKey(User, verbose_name="作者")
+	vnumber = models.IntegerField('浏览次数',default=0)
 	class Meta:
 		verbose_name_plural = '文章'
 	def __unicode__(self):
 		return self.headline
-

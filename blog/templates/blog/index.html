@@ -50,7 +50,7 @@
 			    		{{ articel.content | markdown | striptags | slice:'100' }}...
 		    	</small>
 		  	</div>
-		  	<span style="float:right;"> <small>  发布于: {{ articel.pub_date}}</small> </span>
+		  	<span style="float:right;">  <small> 浏览：{{ articel.vnumber}} &nbsp;&nbsp;&nbsp;&nbsp;  发布于: {{ articel.pub_date}}</small> </span>
 		</div>
 		{% endfor %}
 		

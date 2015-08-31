@@ -15,6 +15,7 @@ import re
 from django.core import serializers
 from django.template.loader import get_template 
 from django.template import Context 
+from mail_sender import SendMail
 
 @login_required(login_url="/login/")
 def home(request, user_id):
@@ -50,6 +51,8 @@ def index(request):
 
 def articel(request, articel_id):
 	articel = Articel.objects.get(id = articel_id)
+	articel.vnumber = articel.vnumber+1
+	articel.save()
 	return render(request, 'blog/articel.html', locals())
 
 def loadmore(request):
@@ -166,6 +169,8 @@ def doregist(request):
 		user = User.objects.get(username=username)
 		user = authenticate(username = user.username, password=password)
 		auth_login(request,user)
+		sm = SendMail()
+		sm.send_mail(email, username)
 		return home(request, user.id)
 
 
