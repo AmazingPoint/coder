@@ -1,17 +1,17 @@
 {% load staticfiles %}
 
 <div class="commentlist">
-{% for comment in comment_list %}
-			<div class="well well-lg linkReply" id="{{ comment.id }}" tid="{{ comment.target_id }}" uname="{{ comment.from_user.username }}">
-			<span style="color:#888;">来自
-		    		<a class="headlinelink" href="/home/{{comment.from_user.id}}"> 
-			    			{{ comment.from_user.username }} 
-		    		</a>的评论:</span>		    	
-		    		{% if comment.reply %}
-		    			<a href="/home/{{comment.reply.from_user.id}}">@{{comment.reply.from_user.username}}</a>
-		    		{% endif %}
-		    		{{ comment.content }}
-			</div>
+{% for comment in comment_list %}	
+		<div class="well well-lg linkReply" id="{{ comment.id }}" tid="{{ comment.target_id }}" uname="{{ comment.from_user.username }}">
+		<span style="color:#888;">来自
+	    		<a class="headlinelink" href="/home/{{comment.from_user.id}}"> 
+		    			{{ comment.from_user.username }} 
+	    		</a>的评论:</span>		    	
+	    		{% if comment.reply %}
+	    			<a href="/home/{{comment.reply.from_user.id}}">@{{comment.reply.from_user.username}}</a>
+	    		{% endif %}
+	    		{{ comment.content }}
+		</div>
 {% endfor %}
 </div>
 <div id="info" tid="{{ tid }}" ></div>
@@ -23,7 +23,7 @@
 </div>
 
 <script type="text/javascript">
-	
+
 	$(document).ready(function(){
 		$(".alert").hide();
 	});
@@ -108,8 +108,9 @@
 	$(function() {
         testEditor = editormd("editormd", {
             width   : "100%",
-            height  : 300,
+            height  : 150,
             path    : "{% static "lib/" %}",
+            watch	: false,
             toolbarIcons : function() {
 	            return ["undo","redo","|","bold","del","italic","quote","|","list-ul","list-ol","|","code-block","datetime","html-entities","|","watch","preview","clear","||","pub"]
 	        },
