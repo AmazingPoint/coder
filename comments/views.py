@@ -9,6 +9,8 @@ from comments.models import Comment
 from django.core import serializers
 from django.template.loader import get_template 
 from django.template import Context 
+from mail import mail_sender
+from blog.models import Articel
 
 def load_comment(request):
 	target_type = request.POST['type']
@@ -28,6 +30,7 @@ def add_comment(request):
 	content = request.POST['content']
 	reply_id = request.POST['reply_id']
 	reply_id = int(reply_id)
+	target_id = int(target_id)
 	from_user = request.user
 	if reply_id == -1:
 		comment = Comment(target_id=target_id, target_type=target_type, content=content, from_user=from_user)
@@ -35,4 +38,9 @@ def add_comment(request):
 		reply = Comment.objects.get(id=reply_id)
 		comment = Comment(target_id=target_id, target_type=target_type, content=content, from_user=from_user, reply=reply)
 	comment.save()
+	receiver = Articel.objects.get(id=target_id).author.email
+	target_id = str(target_id)
+	sem = mail_sender.SendMail()
+	print from_user.username
+	sem.comment_notify(receiver, from_user.username, target_id)
 	return HttpResponse('success')

@@ -15,7 +15,7 @@ import re
 from django.core import serializers
 from django.template.loader import get_template 
 from django.template import Context 
-from mail_sender import SendMail
+from mail import mail_sender
 import time
 
 @login_required(login_url="/login/")
@@ -170,8 +170,8 @@ def doregist(request):
 		user = User.objects.get(username=username)
 		user = authenticate(username = user.username, password=password)
 		auth_login(request,user)
-		sm = SendMail()
-		sm.send_mail(email, username)
+		sm = mail_sender.SendMail()
+		sm.welcom_register(email, username)
 		return home(request, user.id)
 
 

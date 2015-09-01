@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'blog',
     'comments',
+	'mail',
     'markdown_deux',
 )
 
