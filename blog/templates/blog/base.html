@@ -10,6 +10,8 @@
     <script src="{% static "js/jquery.min.js" %}"></script>
 	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 	<script src="{% static "js/bootstrap.min.js" %}"></script>
+	<link rel="stylesheet" href="{% static "css/editormd.css" %}" />
+	<script src="{% static "js/editormd.min.js" %}"></script>
 	<title>CODERBLOG</title>
 	{% block style %}
 	{% endblock %}
@@ -17,6 +19,7 @@
 	{% endblock %}
 	<style type="text/css">
 		body,ul{margin: 0; padding: 0;}
+		a{cursor: pointer;}
 		a:hover{text-decoration: none; cursor: pointer;}
 		.row{max-width: 100%;}
 		.navbar{margin: 0; padding: 0; list-style: none; width: 42px; background: #339966; border: 0; position: fixed;}
@@ -43,11 +46,14 @@
 		.headlinelink {color: #339966;}
 
 		.media{border-bottom: dashed 1px #ccc; padding: 20px 10px;}
-		.bottom{float: left; width: 100%; text-align: center; margin: 30px;}
-
+		.bottom{ float: left; width: 100%; text-align: center; margin: 30px;  margin: 0; margin-top: 40px; padding: 0;  }
+		.footer{float: left; margin: 0; width: 100%; padding: 10px; text-align: center; border-top: 2px solid #339966;}
+		#comment{padding: 10px 0; margin: 20px 0; border-top: 5px #339966 solid;}
 		.col-md-1{float: right; margin-top: 10px; margin-left:-10px;  margin-right: 0px; padding: 0; text-align: right; width: auto; overflow: hidden;}
 
 		.user-info{ background: #999; font-size: 36px; color: #fff; border-radius: 100px; text-align: center; line-height: 60px; overflow: hidden; }
+
+		.linkReply{ cursor: pointer; }
 
 	</style>
  

@@ -31,10 +31,11 @@
     <!-- content -->
     <div class="content">
         <div id="layout">
-            <div id="test-editormd-view2">
+            <div id="test-editormd-view2" tid="{{articel.id}}">
                 <textarea id="append-test" style="display:none;">{{articel.content}}</textarea>          
             </div>
         </div>
+        <完>
         <!-- <script src="js/zepto.min.js"></script>
         <script>        
             var jQuery = Zepto;  // 为了避免修改flowChart.js和sequence-diagram.js的源码，所以使用Zepto.js时想支持flowChart/sequenceDiagram就得加上这一句
@@ -67,13 +68,63 @@
     </div>
     <!-- end content-->
 
+<script type="text/javascript">
+    $(document).ready(function(){
+        // using jQuery
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+        
+    
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajax({
+                type:"POST",
+                url:"/comment/loadcomment/",
+                data : {
+                    type    : 'blog',
+                    tid     : $("#test-editormd-view2").attr('tid'), 
+                },
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod('POST') && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                },
+                success : function(result){
+                    $('#comment').html(result);
+                }
+            });
+        })
+    </script>
+
+
     <!-- bottom -->
+    
     <div class="bottom" style="text-align:left;">
-        <hr>
-        <p><strong>{{ articel.author }}</strong></p>
-        <i>杜绝粗俗信息的根本办法是---------不设置Comment</i><br/>
-        <i>本文由{{ articel.author }}发布，如果你觉得本文对你有用或者你想要迫切的对{{ articel.author }} 表达你强烈的仰（爱）慕之情，请通过邮箱联系<i><br>
-        <a href="mailto:{{ articel.author.email }}">{{ articel.author.email }}</a>
+        <div id="comment" >
+
+        </div>
+        <div class="footer">
+            <p><strong>{{ articel.author }}</strong></p>
+            <i>本文由{{ articel.author }}发布，如果你觉得本文对你有用或者你想要迫切的对{{ articel.author }} 表达你强烈的仰（爱）慕之情，请通过邮箱联系<i><br>
+            <a href="mailto:{{ articel.author.email }}">{{ articel.author.email }}</a>
+        </div>
     </div>
     <!-- end bottom -->
 </div>

@@ -20,5 +20,5 @@ urlpatterns = patterns('',
 	url(r'^dologin/$', views.dologin, name="dologin"),
 	url(r'^regist/$', views.regist, name="regist"),
 	url(r'^doregist/$', views.doregist, name="doregist"),
-	url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'blog/logout.html'}),
+	url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'blog/logout.html'}),	
 )

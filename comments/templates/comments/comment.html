@@ -1,0 +1,124 @@
+{% load staticfiles %}
+
+<div class="commentlist">
+{% for comment in comment_list %}
+			<div class="well well-lg linkReply" id="{{ comment.id }}" tid="{{ comment.target_id }}" uname="{{ comment.from_user.username }}">
+			<span style="color:#888;">来自
+		    		<a class="headlinelink" href="/home/{{comment.from_user.id}}"> 
+			    			{{ comment.from_user.username }} 
+		    		</a>的评论:</span>		    	
+		    		{% if comment.reply %}
+		    			<a href="/home/{{comment.reply.from_user.id}}">@{{comment.reply.from_user.username}}</a>
+		    		{% endif %}
+		    		{{ comment.content }}
+			</div>
+{% endfor %}
+</div>
+<div id="info" tid="{{ tid }}" ></div>
+
+<div class="alert alert-warning" role="alert">警告:大侠,好歹输入点什么呗！</div>
+<div class="alert alert-success" role="alert"></div>
+<div id="editormd">
+    <textarea id="textinput" onfocus=False style="display:none;"></textarea>
+</div>
+
+<script type="text/javascript">
+	
+	$(document).ready(function(){
+		$(".alert").hide();
+	});
+
+	var reply_id = -1
+	$(".linkReply").on("click", function(e){
+		reply_id = $(this).attr('id')
+		uname = $(this).attr('uname')
+		$(".alert-success").show().text("开始回复" + uname +" 的评论。");
+	});
+
+	// using jQuery
+	function getCookie(name) {
+	    var cookieValue = null;
+	    if (document.cookie && document.cookie != '') {
+	        var cookies = document.cookie.split(';');
+	        for (var i = 0; i < cookies.length; i++) {
+	            var cookie = jQuery.trim(cookies[i]);
+	            // Does this cookie string begin with the name we want?
+	            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+	                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	                break;
+	            }
+	        }
+	    }
+	    return cookieValue;
+	}
+	var csrftoken = getCookie('csrftoken');
+
+	function csrfSafeMethod(method) {
+	    // these HTTP methods do not require CSRF protection
+	    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+	}
+
+	function pub(){
+        var textarea = $("#textinput");
+        var content = textarea.text();
+       	var tid = $("#info").attr("tid");
+       	if(tid == ''){
+       		tid = $(".linkReply").attr('tid')
+       	}
+       	if(content == ''){
+       		$(".alert-warning").show();
+       		return -1;
+       	}
+        $.ajax({
+            type:"POST",
+            url:"/comment/addcomment/",
+            data : {
+                type    : 'blog',
+                tid     : tid,
+                content : content,
+                reply_id : reply_id, 
+            },
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod('POST') && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            success : function(result){
+            	$(".alert").hide();
+            	$.ajax({
+            		type:"POST",
+	                url:"/comment/loadcomment/",
+	                data : {
+	                    type    : 'blog',
+	                    tid     : tid, 
+	                },
+	                beforeSend: function(xhr, settings) {
+	                    if (!csrfSafeMethod('POST') && !this.crossDomain) {
+	                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+	                    }
+	                },
+	                success : function(result){
+	                    $('#comment').html(result);
+	                }
+            	});
+            }
+        });
+    }
+
+	$(function() {
+        testEditor = editormd("editormd", {
+            width   : "100%",
+            height  : 300,
+            path    : "{% static "lib/" %}",
+            toolbarIcons : function() {
+	            return ["undo","redo","|","bold","del","italic","quote","|","list-ul","list-ol","|","code-block","datetime","html-entities","|","watch","preview","clear","||","pub"]
+	        },
+	         
+	        toolbarCustomIcons :{
+	            pub : "<input onclick='pub();' type='button' style='width:100px; background:#0066CC; height:35px; font-size:18px; color:#FFF; border:none; border-radius: 0.3em; cursor:pointer; float:right;' value='评论或回复'></button>"
+	        },
+        });
+    });
+
+    
+</script>

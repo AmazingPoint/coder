@@ -695,7 +695,7 @@
                 theme                     : settings.editorTheme,
                 tabSize                   : settings.tabSize,
                 dragDrop                  : false,
-                autofocus                 : settings.autoFocus,
+                autofocus                 : false,
                 autoCloseTags             : settings.autoCloseTags,
                 readOnly                  : (settings.readOnly) ? "nocursor" : false,
                 indentUnit                : settings.indentUnit,
