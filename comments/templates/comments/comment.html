@@ -10,7 +10,8 @@
 	    		{% if comment.reply %}
 	    			<a href="/home/{{comment.reply.from_user.id}}">@{{comment.reply.from_user.username}}</a>
 	    		{% endif %}
-	    		{{ comment.content }}
+	    		{{ comment.content }}	
+	    		<div style="float:right; margin-right:10px; line-height:40px;"><small>{{ comment.pud_date }}</small></div>
 		</div>
 {% endfor %}
 </div>
