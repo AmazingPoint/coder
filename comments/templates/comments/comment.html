@@ -15,14 +15,27 @@
 		</div>
 {% endfor %}
 </div>
-<div id="info" tid="{{ tid }}" ></div>
 
+<div id="info" tid="{{ tid }}" ></div>
 <div class="alert alert-warning" role="alert">警告:大侠,好歹输入点什么呗！</div>
 <div class="alert alert-success" role="alert"></div>
 <div id="editormd">
     <textarea id="textinput" onfocus=False style="display:none;"></textarea>
 </div>
 
+<div id="myModal3" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+		  <div class="modal-dialog modal-sm">
+		    <div class="modal-content" style="padding: 20px;">
+		      <h4 style="color:#339966;"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;&nbsp;登陆之后，请再做评价！</h4>
+		      		<p style="text-align:center;">
+					  <a href="/login/"><button  type="button" class="btn btn-success">登陆</button></a>
+					  <a href="/regist/"><button type="button" class="btn btn-danger">注册</button></a>
+					</p>
+		    </div>
+		  </div>
+</div>
+
+<script src="{% static "js/bootstrap.min.js" %}"></script>
 <script type="text/javascript">
 
 	$(document).ready(function(){
@@ -86,22 +99,26 @@
             },
             success : function(result){
             	$(".alert").hide();
-            	$.ajax({
-            		type:"POST",
-	                url:"/comment/loadcomment/",
-	                data : {
-	                    type    : 'blog',
-	                    tid     : tid, 
-	                },
-	                beforeSend: function(xhr, settings) {
-	                    if (!csrfSafeMethod('POST') && !this.crossDomain) {
-	                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-	                    }
-	                },
-	                success : function(result){
-	                    $('#comment').html(result);
-	                }
-            	});
+            	if(result == '403'){
+            		$('#myModal3').modal('show')
+            	}else{
+            		$.ajax({
+	            		type:"POST",
+		                url:"/comment/loadcomment/",
+		                data : {
+		                    type    : 'blog',
+		                    tid     : tid, 
+		                },
+		                beforeSend: function(xhr, settings) {
+		                    if (!csrfSafeMethod('POST') && !this.crossDomain) {
+		                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		                    }
+		                },
+		                success : function(result){
+		                    $('#comment').html(result);
+		                }
+	            	});
+            	}
             }
         });
     }

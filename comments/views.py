@@ -32,6 +32,8 @@ def add_comment(request):
 	reply_id = int(reply_id)
 	target_id = int(target_id)
 	from_user = request.user
+	if from_user.is_anonymous():
+		return HttpResponse('403')
 	if reply_id == -1:
 		comment = Comment(target_id=target_id, target_type=target_type, content=content, from_user=from_user)
 	else:
@@ -41,6 +43,5 @@ def add_comment(request):
 	receiver = Articel.objects.get(id=target_id).author.email
 	target_id = str(target_id)
 	sem = mail_sender.SendMail()
-	print from_user.username
 	sem.comment_notify(receiver, from_user.username, target_id)
-	return HttpResponse('success')
+	return HttpResponse('304')
