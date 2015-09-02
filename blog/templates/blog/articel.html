@@ -3,6 +3,7 @@
 
 {% block style %}
 <link rel="stylesheet" href="{%static  "css/editormd.preview.css" %}"/>
+<link rel="stylesheet" href="{%static "css/share.css"%}" />
         <style>
             body {padding: 40px;}
             
@@ -35,7 +36,20 @@
                 <textarea id="append-test" style="display:none;">{{articel.content}}</textarea>          
             </div>
         </div>
-        ------完------
+        ------完------<div name="description" content="{{ articel.headline }}"></div>
+
+        <div class="sns-share" style="text-align:center;">
+            <a href="" class="qzone"><i class="icon iconfont icon-qzone"></i></a>
+            <a href="" class="qq"><i class="icon iconfont icon-qq"></i></a>
+            <a href="" class="weibo"><i class="icon iconfont icon-weibo"></i></a>
+            <a href="" class="wechat"><i class="icon iconfont icon-wechat"></i></a>
+            <a href="" class="douban"><i class="icon iconfont icon-douban"></i></a>
+        </div>
+
+        <!-- 引入sns.js -->
+
+       
+
         <!-- <script src="js/zepto.min.js"></script>
         <script>        
             var jQuery = Zepto;  // 为了避免修改flowChart.js和sequence-diagram.js的源码，所以使用Zepto.js时想支持flowChart/sequenceDiagram就得加上这一句
@@ -51,6 +65,12 @@
         <script src="{% static "lib/jquery.flowchart.min.js" %}"></script>
 
         <script src="{% static "js/editormd.js" %}"></script>
+        <script src="{% static "js/share.js" %}"></script>
+        <script>
+            $(function(){
+                $('.sns-share').share();
+            });
+        </script>
         <script type="text/javascript">
             $(function() {
                 var testEditormdView, testEditormdView2;
