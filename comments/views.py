@@ -43,5 +43,5 @@ def add_comment(request):
 	receiver = Articel.objects.get(id=target_id).author.email
 	target_id = str(target_id)
 	sem = mail_sender.SendMail()
-	sem.comment_notify(receiver, from_user.username, target_id)
+	sem.comment_notify(receiver, from_user.username, content, target_id)
 	return HttpResponse('304')
