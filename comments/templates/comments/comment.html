@@ -1,17 +1,20 @@
 {% load staticfiles %}
-
 <div class="commentlist">
 {% for comment in comment_list %}	
 		<div class="well well-lg linkReply" id="{{ comment.id }}" tid="{{ comment.target_id }}" uname="{{ comment.from_user.username }}">
 		<span style="color:#888;">来自
 	    		<a class="headlinelink" href="/home/{{comment.from_user.id}}"> 
 		    			{{ comment.from_user.username }} 
-	    		</a>的评论:</span>		    	
+	    		</a>的评论</span>		    	
 	    		{% if comment.reply %}
 	    			<a href="/home/{{comment.reply.from_user.id}}">@{{comment.reply.from_user.username}}</a>
 	    		{% endif %}
-	    		{{ comment.content }}	
-	    		<div style="float:right; margin-right:10px; line-height:40px;"><small>{{ comment.pud_date }}</small></div>
+	    		<div class="editormd-html-preview editormd-preview-container markdown-body" style="background: 0;">
+	    		{% autoescape off %}
+		    		{{ comment.content }}
+	    		{% endautoescape %}
+	    		</div>
+	    		<div style="float:right; margin-right:10px; line-height:-20px;"><small>{{ comment.pud_date }}</small></div>
 		</div>
 {% endfor %}
 </div>
@@ -22,6 +25,7 @@
 
 <div id="editormd">
     <textarea id="textinput" onfocus=False style="display:none;"></textarea>
+    <textarea class="editormd-markdown-textarea" name="$id-markdown-doc"></textarea>
 </div>
 
 <div id="myModal3" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -84,8 +88,7 @@
 	}
 
 	function pub(){
-        var textarea = $("#textinput");
-        var content = textarea.text();
+       	var content = testEditor.getPreviewedHTML()
        	var tid = $("#info").attr("tid");
        	if(tid == ''){
        		tid = $(".linkReply").attr('tid')
@@ -115,7 +118,7 @@
             		$('#myModal3').modal('show')
             	}
             	else{
-            		$(".commentlist").append("<div class='well well-lg'><span style='color:#888;'>来自	<a class='headlinelink' href='#'> 我	</a>的评论:</span>"+ content +"<div style='float:right; margin-right:10px; line-height:40px;'><small>刚刚</small></div></div>");
+            		$(".commentlist").append("<div class='well well-lg'><span style='color:#888;'>来自	<a class='headlinelink' href='#'> 我	</a>的评论<div class='editormd-html-preview editormd-preview-container markdown-body' style='background: 0;'>"+ content +"</div><div style='float:right; margin-right:10px;'><small>刚刚</small></div></div>");
             		testEditor.clear();
             		$('#myModal4').modal('hide');
             	}
@@ -126,9 +129,9 @@
 	$(function() {
         testEditor = editormd("editormd", {
             width   : "100%",
-            height  : 150,
+            height  : 300,
             path    : "{% static "lib/" %}",
-            watch	: false,
+            watch	: true,
             toolbarIcons : function() {
 	            return ["undo","redo","|","bold","del","italic","quote","|","list-ul","list-ol","|","code-block","datetime","html-entities","|","watch","preview","clear","||","pub"]
 	        },
