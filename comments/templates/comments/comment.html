@@ -56,7 +56,8 @@
 	$(".linkReply").on("click", function(e){
 		reply_id = $(this).attr('id')
 		uname = $(this).attr('uname')
-		$(".alert-success").show().text("开始回复" + uname +" 的评论。");
+		var t = $(".alert-success").show().text("开始回复" + uname +" 的评论。").offset().top;
+        $(window).scrollTop(t);
 	});
 
 	// using jQuery

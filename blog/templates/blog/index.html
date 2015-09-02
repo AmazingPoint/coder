@@ -36,7 +36,7 @@
 		{% for articel in articel_list %}
 		<div class="media">
 			<div class="media-left media-middle">
-		    	<a href="#">
+		    	<a href="/home/{{ articel.author.id }}">
 		      		<div class="media-object user-info "> {{ articel.author.username | slice:'2'}}  </div>
 		    	</a>
 		  	</div>
