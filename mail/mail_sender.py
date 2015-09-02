@@ -40,14 +40,14 @@ class SendMail:
 		smtp.sendmail(sender, receiver, msg.as_string()) 
 		smtp.close()
 
-	def comment_notify(self, receiver, from_user, content ,target_id):
+	def comment_notify(self, receiver, from_user, contents ,target_id):
 		sender = '2715657947@qq.com'  
 		receiver = receiver 
 		smtpserver = 'smtp.qq.com'  
 		username = '2715657947@qq.com'  
 		password = '99delove'  
 
-		content="<html><meta http-equiv='Content-Type' content='text/html; charset=utf-8'/><head><title>CODER 程序员的技术社区</title><style type='text/css'>p{margin:20px 10px; color:#aaa; font-size: 14px;} table{border-top: #339966 6px solid;  padding: 30px 0;} td{padding: 20px 0; }</style></head><body><table style='text-align:center; width:80%; margin:auto;' ><tr><td style='border-bottom: 4px solid #ccc;'><h1 style='color:#339966;'>Coder</h1></td></tr><tr><td><p>您在coder上的文章有新的动态。</p><b>"+ from_user  +"</b>评论了您的文章 <a href='http://123.57.149.136/articel/"+ target_id +"'> http://123.57.149.136/articel/"+ target_id +"</a><p><b>"+ content +"</b></p></td></tr><tr style='background-color:#eee;'><td style='font-size:13px; border-bottom:20px solid #eee;'>联系方式:<a style='color:#339966;' href='mailto:greenpointan@icloud.com'>greenpointan@icloud.com</a></td></tr></table></body></html>"
+		content="<html><meta http-equiv='Content-Type' content='text/html; charset=utf-8'/><head><title>CODER 程序员的技术社区</title><style type='text/css'>p{margin:20px 10px; color:#aaa; font-size: 14px;} table{border-top: #339966 6px solid;  padding: 30px 0;} td{padding: 20px 0; }</style></head><body><table style='text-align:center; width:80%; margin:auto;' ><tr><td style='border-bottom: 4px solid #ccc;'><h1 style='color:#339966;'>Coder</h1></td></tr><tr><td><p>您在coder上的文章有新的动态。</p><b>"+ from_user  +"</b>评论了您的文章 <a href='http://123.57.149.136/articel/"+ target_id +"'> http://123.57.149.136/articel/"+ target_id +"</a><p><b>"+ contents +"</b></p></td></tr><tr style='background-color:#eee;'><td style='font-size:13px; border-bottom:20px solid #eee;'>联系方式:<a style='color:#339966;' href='mailto:greenpointan@icloud.com'>greenpointan@icloud.com</a></td></tr></table></body></html>"
 		msg = MIMEText(content,_subtype='html',_charset='utf-8')    #创建一个实例，这里设置为html格式邮件
 		msg["Accept-Language"]="zh-CN"
 		msg["Accept-Charset"]="ISO-8859-1,utf-8"
