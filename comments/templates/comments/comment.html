@@ -115,6 +115,7 @@
             success : function(result){
             	$(".alert").hide();
             	if(result == '403'){
+            		$('#myModal4').modal('hide')
             		$('#myModal3').modal('show')
             	}
             	else{
