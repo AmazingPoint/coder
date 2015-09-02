@@ -19,6 +19,7 @@
 <div id="info" tid="{{ tid }}" ></div>
 <div class="alert alert-warning" role="alert">警告:大侠,好歹输入点什么呗！</div>
 <div class="alert alert-success" role="alert"></div>
+
 <div id="editormd">
     <textarea id="textinput" onfocus=False style="display:none;"></textarea>
 </div>
@@ -35,13 +36,22 @@
 		  </div>
 </div>
 
+<div id="myModal4" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+		  <div class="modal-dialog modal-sm">
+		    <div class="modal-content" style="padding: 20px;">
+		      <h4 style="color:#339966;"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;&nbsp;愿意等待是一种品德</h4>
+		      <h4 style="color:#339966;"></span>&nbsp;&nbsp;&nbsp;让你等待是我的失败</h4>
+		    </div>
+		  </div>
+</div>
+
 <script src="{% static "js/bootstrap.min.js" %}"></script>
 <script type="text/javascript">
 
 	$(document).ready(function(){
 		$(".alert").hide();
 	});
-
+	var testEditor
 	var reply_id = -1
 	$(".linkReply").on("click", function(e){
 		reply_id = $(this).attr('id')
@@ -83,6 +93,7 @@
        		$(".alert-warning").show();
        		return -1;
        	}
+       	$("#myModal4").modal('show')
         $.ajax({
             type:"POST",
             url:"/comment/addcomment/",
@@ -101,23 +112,11 @@
             	$(".alert").hide();
             	if(result == '403'){
             		$('#myModal3').modal('show')
-            	}else{
-            		$.ajax({
-	            		type:"POST",
-		                url:"/comment/loadcomment/",
-		                data : {
-		                    type    : 'blog',
-		                    tid     : tid, 
-		                },
-		                beforeSend: function(xhr, settings) {
-		                    if (!csrfSafeMethod('POST') && !this.crossDomain) {
-		                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-		                    }
-		                },
-		                success : function(result){
-		                    $('#comment').html(result);
-		                }
-	            	});
+            	}
+            	else{
+            		$(".commentlist").append("<div class='well well-lg'><span style='color:#888;'>来自	<a class='headlinelink' href='#'> 我	</a>的评论:</span>"+ content +"<div style='float:right; margin-right:10px; line-height:40px;'><small>刚刚</small></div></div>");
+            		testEditor.clear();
+            		$('#myModal4').modal('hide');
             	}
             }
         });
@@ -134,7 +133,7 @@
 	        },
 	         
 	        toolbarCustomIcons :{
-	            pub : "<input onclick='pub();' type='button' style='width:100px; background:#0066CC; height:35px; font-size:18px; color:#FFF; border:none; border-radius: 0.3em; cursor:pointer; float:right;' value='评论或回复'></button>"
+	            pub : "<input onclick='pub();' id='pubbutton' type='button' style='width:100px; background:#0066CC; height:35px; font-size:18px; color:#FFF; border:none; border-radius: 0.3em; cursor:pointer; float:right;' value='评论或回复'></button>"
 	        },
         });
     });
