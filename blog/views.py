@@ -17,6 +17,7 @@ from django.template.loader import get_template
 from django.template import Context 
 from mail import mail_sender
 import time
+import os
 
 @login_required(login_url="/login/")
 def home(request, user_id):
@@ -34,15 +35,6 @@ def metaown(request, user_id, meta_id):
 	meta_list = ITMeta.objects.all()
 	articel_list = Articel.objects.filter(author__id=user_id).filter(meta__id=meta_id).order_by('-pub_date')[0:10]
 	return render(request, 'blog/home.html', locals())
-
-@login_required(login_url="/login/")
-def delete(request, articel_id):
-	articel = Articel.objects.get(id=articel_id)
-	if request.user.id == articel.author.id:
-		articel.delete()
-		return HttpResponseRedirect(reverse('home', args=(request.user.id,)))
-	else:
-		return HttpResponse("我很懒，所以我也很穷，别黑我！")
 
 
 def index(request):
@@ -68,6 +60,15 @@ def loadmore(request):
 	t = get_template('blog/articel_list.html')
 	html = t.render(Context({"articel_list" : articel_list}))
 	return HttpResponse(html)
+
+@login_required(login_url="/login/")
+def delete(request, articel_id):
+	articel = Articel.objects.get(id=articel_id)
+	if request.user.id == articel.author.id:
+		articel.delete()
+		return HttpResponseRedirect(reverse('home', args=(request.user.id,)))
+	else:
+		return HttpResponse("我很懒，所以我也很穷，别黑我！")
 
 def metas(request):
 	metas = ITMeta.objects.all()
@@ -132,6 +133,44 @@ def create(request):
 
 def regist(request):
 	return render(request, 'blog/register.html')
+
+def set_pay(request):
+	error = '上传您的微信收款码'
+	return render(request, 'blog/upload_weichat_pay.html', locals())
+
+def pay(request, author_id):
+	user = User.objects.get(id=author_id)
+	profile = CustomProFile.objects.filter(user=user) 
+	return render(request, 'blog/pay.html', locals())
+
+def upload_img(request):
+	try:
+		request_file = request.FILES['pay_img']
+		user_id = request.user.id
+		path = create_image_path(request_file, user_id)
+	except:
+		path = None
+		error = '上传文件出现问题'
+	profile = CustomProFile(user=request.user, weichat_pay=path)
+	profile.save()
+	return render(request, 'blog/upload_weichat_pay.html', locals())
+
+
+def create_image_path(f, user_id):
+	file_name = ""
+	try:
+		path = "media/"+ str(user_id) + time.strftime('/%Y/%m/%d/%H/%M/%S/')
+		print path
+		if not os.path.exists(path):
+			os.makedirs(path)
+			file_name = path + f.name
+			destination = open(file_name, 'wb+')
+			for chunk in f.chunks():
+				destination.write(chunk)
+			destination.close()
+	except Exception, e:
+		print e
+	return file_name
 
 def doregist(request):
 	username = request.POST.get('username', '1')

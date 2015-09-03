@@ -21,4 +21,7 @@ urlpatterns = patterns('',
 	url(r'^regist/$', views.regist, name="regist"),
 	url(r'^doregist/$', views.doregist, name="doregist"),
 	url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'blog/logout.html'}),
+	url(r'^setpay/$', views.set_pay, name="setpay"),
+	url(r'^pay/(?P<author_id>\d+)/$', views.pay, name="pay"),
+	url(r'^uploadimg/$', views.upload_img, name="uploadimg"),
 )

@@ -1,0 +1,30 @@
+{% extends "blog/base.html"%}
+{% load staticfiles %}
+
+{% block navbar %}
+<li class="active"><a href="/">码</a></li>
+<li><a href="/metas"><span class="glyphicon glyphicon-th"></span></a></li>
+<li><a href="/articel/1"><span class="glyphicon glyphicon-erase"></span></a></li>
+{% endblock %}
+
+{% block content %}
+<!-- content -->
+<div class="col-md-7" style="text-align:center; valign:center; padding:80px; ">
+
+    <div class="panel panel-default" style="width:400px; margin:70px;">
+        <!-- content -->
+        <div class="panel-body">
+            <div class="content" > 
+                <div class="alert alert-success" role="alert">声明：打赏是用户与用户之间的直接转账，与本站无关</div>
+                <div>
+                    {% for pf in profile %}
+                       <img src="/{{ pf.weichat_pay }}">
+                    {% endfor %}
+                </div> 
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}

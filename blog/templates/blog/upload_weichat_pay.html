@@ -1,0 +1,44 @@
+{% extends "blog/base.html"%}
+{% load staticfiles %}
+
+{% block navbar %}
+<li class="active"><a href="/">码</a></li>
+<li><a href="/metas"><span class="glyphicon glyphicon-th"></span></a></li>
+<li><a href="/articel/1"><span class="glyphicon glyphicon-erase"></span></a></li>
+{% endblock %}
+
+{% block content %}
+<!-- content -->
+<div class="col-md-7" style="text-align:center; valign:center; padding:80px; ">
+
+    <div class="panel panel-default" style="width:400px; margin:70px;">
+        <!-- content -->
+    <div class="panel-body">
+        <div class="content" > 
+            <form action="/uploadimg/" enctype="multipart/form-data" method="post">
+              {% csrf_token %}
+                   <input class="btn btn-danger" type="file" name = "pay_img" style="width:100%;" > 点击红色长条，选取文件<br>
+                   <button class="btn btn-success" value="提交" type="submit">提交</button>
+            </form>
+            
+        </div>
+    </div>
+    {% if error %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+    {% else %}
+        <script type="text/javascript">
+          $("form").hide();
+        </script>
+        <div>
+            <img src="/{{ path }}">
+        </div> 
+        <a href="/home/{{ user.id }}">设置成功！点击这里离开！</a></div>
+    {% endif %}
+    
+<!-- end content-->
+</div>
+
+    
+
+</div>
+{% endblock %}

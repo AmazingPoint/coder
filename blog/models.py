@@ -7,6 +7,13 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+class CustomProFile(models.Model):
+	'''User ProFile'''
+	user = models.ForeignKey(User, related_name='user_up', verbose_name='用户')
+	weichat_pay = models.ImageField("微信付款码", upload_to = 'pay_photos', blank=True, null=True)
+	class Meta:
+		verbose_name_plural = '个人信息'
+
 class ITMeta(models.Model):
 	'''The meta for IT '''
 	name = models.CharField('名称', max_length=48)
