@@ -5,3 +5,4 @@ from comments.models import Comment
 admin.site.register(ITMeta)
 admin.site.register(Articel)
 admin.site.register(Comment)
+admin.site.register(CustomProFile)

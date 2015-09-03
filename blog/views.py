@@ -149,8 +149,10 @@ def upload_img(request):
 		user_id = request.user.id
 		path = create_image_path(request_file, user_id)
 	except:
-		path = None
+		path = ''
 		error = '上传文件出现问题'
+	if path == '':
+		return HttpResponse("服务器出问题啦。。。")
 	profile = CustomProFile(user=request.user, weichat_pay=path)
 	profile.save()
 	return render(request, 'blog/upload_weichat_pay.html', locals())
@@ -159,8 +161,7 @@ def upload_img(request):
 def create_image_path(f, user_id):
 	file_name = ""
 	try:
-		path = "media/"+ str(user_id) + time.strftime('/%Y/%m/%d/%H/%M/%S/')
-		print path
+		path = "media/"+ str(user_id) + time.strftime('--%Y-%m-%d-%H-%M-%S--')
 		if not os.path.exists(path):
 			os.makedirs(path)
 			file_name = path + f.name
