@@ -18,6 +18,7 @@ from django.template import Context
 from mail import mail_sender
 import time
 import os
+from CoderBlog import settings
 
 @login_required(login_url="/login/")
 def home(request, user_id):
@@ -139,8 +140,7 @@ def set_pay(request):
 	return render(request, 'blog/upload_weichat_pay.html', locals())
 
 def pay(request, author_id):
-	user = User.objects.get(id=author_id)
-	profile = CustomProFile.objects.filter(user=user) 
+	profile = CustomProFile.objects.get(id=author_id) 
 	return render(request, 'blog/pay.html', locals())
 
 def upload_img(request):
@@ -153,7 +153,8 @@ def upload_img(request):
 		error = '上传文件出现问题'
 	if path == '':
 		return HttpResponse("服务器出问题啦。。。")
-	profile = CustomProFile(user=request.user, weichat_pay=path)
+	profile = CustomProFile.objects.get(id=request.user.id)
+	profile.weichat_pay = path
 	profile.save()
 	return render(request, 'blog/upload_weichat_pay.html', locals())
 
@@ -161,11 +162,13 @@ def upload_img(request):
 def create_image_path(f, user_id):
 	file_name = ""
 	try:
-		path = "media/"+ str(user_id) + time.strftime('--%Y-%m-%d-%H-%M-%S--')
-		if not os.path.exists(path):
-			os.makedirs(path)
-			file_name = path + f.name
-			destination = open(file_name, 'wb+')
+		path = str(user_id) + time.strftime('/%Y/%m/%d/%H/%M/%S/')
+		rel_path = settings.MEDIA_ROOT + "/" + path
+		if not os.path.exists(rel_path):
+			os.makedirs(rel_path)
+			file_name = path  + f.name
+			rel_file_name = rel_path + f.name
+			destination = open(rel_file_name, 'wb+')
 			for chunk in f.chunks():
 				destination.write(chunk)
 			destination.close()
@@ -209,10 +212,11 @@ def doregist(request):
 		user.save()
 		user = User.objects.get(username=username)
 		user = authenticate(username = user.username, password=password)
+		profile = CustomProFile(id=user.id, user=user, weichat_pay='1.jpg')
 		auth_login(request,user)
 		sm = mail_sender.SendMail()
 		sm.welcom_register(email, username)
-		return home(request, user.id)
+		return set_pay(request)
 
 
 def login(request):

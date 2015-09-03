@@ -13,6 +13,8 @@ class CustomProFile(models.Model):
 	weichat_pay = models.ImageField("微信付款码", upload_to = 'pay_photos', blank=True, null=True)
 	class Meta:
 		verbose_name_plural = '个人信息'
+	def __unicode__(self):
+		return self.user
 
 class ITMeta(models.Model):
 	'''The meta for IT '''

@@ -17,9 +17,7 @@
             <div class="content" > 
                 <div class="alert alert-success" role="alert">声明：打赏是用户与用户之间的直接转账，与本站无关</div>
                 <div>
-                    {% for pf in profile %}
-                       <img src="/{{ pf.weichat_pay }}">
-                    {% endfor %}
+                    <img src="/media/{{ profile.weichat_pay }}">
                 </div> 
             </div>
         </div>
