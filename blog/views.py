@@ -83,7 +83,7 @@ def meta(request, meta_id):
 
 def search(request):
 	search_text = request.GET['search_text']
-	articel_list = Articel.objects.filter(headline__contains=search_text)
+	articel_list = Articel.objects.filter(headline__contains=search_text).filter(is_pub=True)
 	t = get_template('blog/articel_list.html')
 	html = t.render(Context({"articel_list" : articel_list}))
 	print html

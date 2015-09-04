@@ -17,8 +17,8 @@
         <div class="content" > 
             <form action="/uploadimg/" enctype="multipart/form-data" method="post">
               {% csrf_token %}
-                   <input class="btn btn-danger" type="file" name = "pay_img" style="width:100%;" > 点击红色长条，选取文件<br>
                    <button class="btn btn-success" value="提交" type="submit">提交</button>
+                   <a class="btn btn-success" href="/home/{{ user.id }}">跳过这一步</a>
             </form>
             
         </div>
@@ -30,7 +30,7 @@
           $("form").hide();
         </script>
         <div>
-            <img src="/media/{{ path }}">
+            <img style="width:375;height:378px;" src="/media/{{ path }}">
         </div> 
         <a href="/home/{{ user.id }}">设置成功！点击这里离开！</a></div>
     {% endif %}
