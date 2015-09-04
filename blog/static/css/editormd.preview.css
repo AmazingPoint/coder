@@ -3335,6 +3335,8 @@ li.L9 {
   border: 1px solid #ddd;
   white-space: pre-wrap;
   word-wrap: break-word;
+  background: #eee;
+  border-left: 5px solid #339966;
 }
 .editormd-preview-container ol.linenums, .editormd-html-preview ol.linenums {
   color: #999;

@@ -1,6 +1,6 @@
 (function($){
     $.fn.share = function ($options) {
-        var $image = $(document).find('img:first').attr('src');
+        var $image = $("document").find('img:first').attr('src');
 
         var $defaults = {
             url: window.location.href,
