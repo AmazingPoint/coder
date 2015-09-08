@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from blog import views
+from blog import views, wx_views
 
 print "This is url!!!!!!!!!!!!!"
 
@@ -24,4 +24,8 @@ urlpatterns = patterns('',
 	url(r'^setpay/$', views.set_pay, name="setpay"),
 	url(r'^pay/(?P<author_id>\d+)/$', views.pay, name="pay"),
 	url(r'^uploadimg/$', views.upload_img, name="uploadimg"),
+)
+
+urlpatterns += patterns ('',
+	url(r'^callback/$',wx_views.callback, name="callback"),
 )

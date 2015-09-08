@@ -19,6 +19,7 @@ from mail import mail_sender
 import time
 import os
 from CoderBlog import settings
+import hashlib
 
 @login_required(login_url="/login/")
 def home(request, user_id):
